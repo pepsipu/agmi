@@ -10,12 +10,20 @@ base {
 	archivesName = project.archives_base_name
 }
 
+sourceSets {
+	clientGametest {
+	}
+}
+
+configurations {
+	clientGametestImplementation.extendsFrom implementation
+	clientGametestRuntimeOnly.extendsFrom runtimeOnly
+	clientGametestCompileOnly.extendsFrom compileOnly
+	clientGametestAnnotationProcessor.extendsFrom annotationProcessor
+}
+
 repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
+	mavenCentral()
 }
 
 loom {
@@ -26,8 +34,30 @@ loom {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
+
+		"agmi-gametest" {
+			sourceSet sourceSets.clientGametest
+		}
 	}
 
+	runs {
+		clientGametest {
+			client()
+			configName = "Client Gametest"
+			runDir = "run/client-gametest"
+			vmArg "-Dfabric.client.gametest=true"
+			vmArg "-Dfabric.client.gametest.modid=agmi-gametest"
+			source sourceSets.main
+			source sourceSets.client
+			source sourceSets.clientGametest
+		}
+	}
+
+}
+
+sourceSets.named("clientGametest") {
+	compileClasspath += sourceSets.main.output + sourceSets.client.output + sourceSets.client.compileClasspath
+	runtimeClasspath += output + compileClasspath + sourceSets.main.output + sourceSets.client.output + sourceSets.client.runtimeClasspath
 }
 
 dependencies {
@@ -38,6 +68,10 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	testImplementation platform("org.junit:junit-bom:5.13.4")
+	testImplementation "org.junit.jupiter:junit-jupiter"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 	
 }
 
@@ -50,7 +84,7 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 25
+	it.options.release = 22
 }
 
 java {
@@ -59,8 +93,12 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_25
-	targetCompatibility = JavaVersion.VERSION_25
+	sourceCompatibility = JavaVersion.VERSION_22
+	targetCompatibility = JavaVersion.VERSION_22
+}
+
+test {
+	useJUnitPlatform()
 }
 
 jar {

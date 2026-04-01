@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "agmi:block/generated_artifact_block"
+  }
+}

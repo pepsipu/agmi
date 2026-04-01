@@ -1,9 +1,10 @@
 {
 	"required": true,
 	"package": "agmi.mixin",
-	"compatibilityLevel": "JAVA_25",
+	"compatibilityLevel": "JAVA_22",
 	"mixins": [
-		"ExampleMixin"
+		"CraftingMenuMixin",
+		"ResultSlotMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

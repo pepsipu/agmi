@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "agmi:item/generated_runtime_base",
+    "model": {
+      "type": "agmi:generated_artifact"
+    }
+  }
+}

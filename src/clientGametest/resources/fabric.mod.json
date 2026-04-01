@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "agmi-gametest",
+  "version": "1.0.0",
+  "name": "AGMI Client Gametests",
+  "environment": "client",
+  "entrypoints": {
+    "fabric-client-gametest": [
+      "agmi.gametest.AgmiClientGameTest"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.5",
+    "minecraft": "~26.1",
+    "java": ">=22",
+    "fabric-api": "*",
+    "agmi": "*"
+  }
+}
